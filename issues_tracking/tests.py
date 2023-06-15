@@ -6,12 +6,12 @@ from django.contrib.auth.models import User
 
 class SignupTest(APITestCase):
     def setUp(self):
-        self.url = reverse('signup-list')
+        self.url = reverse("signup-list")
         self.valid_payload = {
             "first_name": "Test",
             "last_name": "User",
             "email": "testuser@example.com",
-            "password": "testpassword123"
+            "password": "testpassword123",
         }
         self.invalid_payload = {
             "first_name": "Test",
@@ -32,3 +32,5 @@ class SignupTest(APITestCase):
         self.client.post(self.url, self.valid_payload)
         response = self.client.post(self.url, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+

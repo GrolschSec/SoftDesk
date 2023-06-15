@@ -114,13 +114,12 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
-

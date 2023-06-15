@@ -25,10 +25,7 @@ class Project(models.Model):
 
 
 class Contributor(models.Model):
-    PERMISSIONS = (
-        ("LEAD", "Lead developer"),
-        ("DEV", "Developer")
-    )
+    PERMISSIONS = (("LEAD", "Lead developer"), ("DEV", "Developer"))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     permissions = models.CharField(max_length=4, choices=PERMISSIONS)

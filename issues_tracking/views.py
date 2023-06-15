@@ -16,7 +16,12 @@ from .serializers import (
     ContributorSerializer,
 )
 from .models import Project, Contributor, Issue, Comment
-from .permissions import IsProjectAuthor, IsAuthorContributor, IsContributorIssue, IsContributorComment
+from .permissions import (
+    IsProjectAuthor,
+    IsAuthorContributor,
+    IsContributorIssue,
+    IsContributorComment,
+)
 from django.db.models import Q
 
 
@@ -30,7 +35,7 @@ class UserSignupViewset(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data.get("email")
         if self.queryset.filter(email=email).exists():
-            raise ValidationError
+            raise ValidationError("A user with this email already exist.")
         user = serializer.save()
         headers = self.get_success_headers(serializer.data)
         refresh = RefreshToken.for_user(user)
@@ -67,8 +72,10 @@ class ProjectViewset(ModelViewSet):
     http_method_names = ["get", "post", "put", "delete"]
 
     def get_queryset(self):
-        user = self.request.user
-        return Project.objects.filter(Q(author_user_id=user) | Q(contributors=user))
+        if self.action == "list":
+            user = self.request.user
+            return Project.objects.filter(Q(author_user_id=user) | Q(contributors=user))
+        return Project.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(author_user_id=self.request.user)
@@ -88,7 +95,7 @@ class ContributorsViewset(ModelViewSet):
         user_id = self.request.data.get("user")
         user = get_object_or_404(User, id=user_id)
         if project.contributors.filter(id=user_id).exists():
-            raise ValidationError('This user is already a contributor to the project.')
+            raise ValidationError("This user is already a contributor to the project.")
         serializer.save(project=project, user=user)
 
 
